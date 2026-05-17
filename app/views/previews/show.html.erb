@@ -1,0 +1,75 @@
+<% content_for :title, @preview[:title] %>
+
+<main class="preview-shell">
+  <section class="toolbar" aria-label="PDF preview actions">
+    <div>
+      <p class="eyebrow">gotenberg-rails example</p>
+      <h1><%= @preview[:title] %></h1>
+    </div>
+    <div class="actions">
+      <%= link_to "HTML", sample_path, class: "button secondary" %>
+      <%= link_to "PDF", sample_path(format: :pdf), class: "button", target: "_blank", rel: "noopener" %>
+      <%= link_to "Direct PDF", direct_path, class: "button secondary", target: "_blank", rel: "noopener" %>
+    </div>
+  </section>
+
+  <article class="sheet">
+    <header class="sheet-header">
+      <div>
+        <p class="eyebrow">PDF preview</p>
+        <h2>Invoice-like sample</h2>
+      </div>
+      <dl>
+        <div>
+          <dt>Issued</dt>
+          <dd><%= l @preview[:issued_on], format: :long %></dd>
+        </div>
+        <div>
+          <dt>Customer</dt>
+          <dd><%= @preview[:customer] %></dd>
+        </div>
+      </dl>
+    </header>
+
+    <section class="summary">
+      <div>
+        <span>Endpoint</span>
+        <strong><%= Gotenberg::Rails.configuration.endpoint %></strong>
+      </div>
+      <div>
+        <span>Renderer</span>
+        <strong><code>render gotenberg_pdf:</code></strong>
+      </div>
+      <div>
+        <span>Format</span>
+        <strong>HTML / PDF</strong>
+      </div>
+    </section>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Description</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @preview[:rows].each do |feature, description, status| %>
+          <tr>
+            <td><%= feature %></td>
+            <td><%= description %></td>
+            <td><span class="pill"><%= status %></span></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <footer>
+      <p>
+        This page is regular Rails HTML. Open the PDF link to send the rendered
+        HTML to Gotenberg through gotenberg-rails.
+      </p>
+    </footer>
+  </article>
+</main>
