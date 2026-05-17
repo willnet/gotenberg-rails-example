@@ -8,6 +8,7 @@ class PreviewsController < ApplicationController
       format.html
       format.pdf do
         render gotenberg_pdf: {
+          display_url: pdf_display_url,
           margin_top: "0",
           margin_bottom: "0",
           margin_left: "0",
@@ -48,6 +49,12 @@ class PreviewsController < ApplicationController
   end
 
   private
+
+  def pdf_display_url
+    base_url = ENV.fetch("PDF_DISPLAY_BASE_URL", request.base_url)
+
+    URI.join("#{base_url.delete_suffix("/")}/", request.fullpath.delete_prefix("/")).to_s
+  end
 
   def set_preview
     @preview = {
