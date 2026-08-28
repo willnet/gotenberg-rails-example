@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html class="pdf-footer-html">
+  <head>
+    <meta charset="utf-8">
+    <style>
+      .pdf-footer-html {
+        width: 100%;
+      }
+      .pdf-footer-body {
+        -webkit-print-color-adjust: exact;
+        box-sizing: border-box;
+        color: #66747c;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        margin: 0;
+        padding: 0 28px;
+        width: 100%;
+      }
+      .pdf-footer-line {
+        align-items: center;
+        border-top: 1px solid #d7ded9;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0 12px;
+        width: calc(8.27in - 56px);
+      }
+      .pdf-footer-issued,
+      .pdf-footer-pages {
+        font-size: 11px;
+      }
+      .pdf-footer-pages {
+        color: #0f766e;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body class="pdf-footer-body">
+    <div class="pdf-footer-line">
+      <span class="pdf-footer-issued">Issued <%= l @preview[:issued_on], format: :long %></span>
+      <span class="pdf-footer-pages">
+        Page <span class="pageNumber"></span> / <span class="totalPages"></span>
+      </span>
+    </div>
+  </body>
+</html>

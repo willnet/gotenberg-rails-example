@@ -33,12 +33,18 @@ class PreviewsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "application/pdf", response.media_type
     assert_includes captured[:html], 'href="http://web:3000/assets/'
+    assert_includes captured[:header_html], "gotenberg-rails example"
+    assert_includes captured[:footer_html], 'class="pageNumber"'
+    assert_equal "0.75in", captured.dig(:pdf_options, :margin_top)
+    assert_equal "0.75in", captured.dig(:pdf_options, :margin_bottom)
   end
 
   test "renders direct pdf through gotenberg rails" do
     original_client = Gotenberg::Rails.client
+    captured = {}
     fake_client = Object.new
-    def fake_client.render_pdf(**)
+    fake_client.define_singleton_method(:render_pdf) do |**kwargs|
+      captured.merge!(kwargs)
       "%PDF-1.7 sample"
     end
 
@@ -52,5 +58,8 @@ class PreviewsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "application/pdf", response.media_type
     assert_includes response.body, "%PDF-1.7"
+    assert_includes captured[:header_html], "Gotenberg Rails Sample"
+    assert_includes captured[:footer_html], 'class="totalPages"'
+    assert_equal "0.75in", captured.dig(:pdf_options, :margin_top)
   end
 end
