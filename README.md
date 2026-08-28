@@ -36,7 +36,6 @@ docker compose run --rm -e GOTENBERG_ENDPOINT=http://gotenberg:3000 web bin/rail
 
 ```sh
 docker compose run --rm web bin/rails test
-docker compose run --rm web bin/rubocop
 ```
 
 ## Stop Services

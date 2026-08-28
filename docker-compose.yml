@@ -3,7 +3,7 @@ services:
     build:
       context: .
       target: development
-    command: bash -c "bin/rails db:prepare && bin/rails server -b 0.0.0.0"
+    command: bin/rails server -b 0.0.0.0
     environment:
       GOTENBERG_ENDPOINT: http://gotenberg:3000
       PDF_DISPLAY_BASE_URL: http://web:3000

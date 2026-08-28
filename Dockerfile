@@ -4,7 +4,7 @@
 # This Dockerfile supports both development and production. Use docker compose
 # for local development, or build the final production image by hand:
 # docker build -t gotenberg_rails_example .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name gotenberg_rails_example gotenberg_rails_example
+# docker run -d -p 3000:3000 -e RAILS_MASTER_KEY=<value from config/master.key> --name gotenberg_rails_example gotenberg_rails_example
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=4.0.3
@@ -15,7 +15,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 sqlite3 && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
@@ -86,9 +86,8 @@ USER 1000:1000
 COPY --chown=rails:rails --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --chown=rails:rails --from=build /rails /rails
 
-# Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+# Start Puma directly; this example does not need a separate HTTP proxy.
+EXPOSE 3000
+CMD ["./bin/rails", "server"]
