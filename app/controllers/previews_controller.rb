@@ -9,8 +9,10 @@ class PreviewsController < ApplicationController
       format.pdf do
         render gotenberg_pdf: {
           display_url: pdf_display_url,
-          margin_top: "0",
-          margin_bottom: "0",
+          header_html: pdf_header_html,
+          footer_html: pdf_footer_html,
+          margin_top: "0.75in",
+          margin_bottom: "0.75in",
           margin_left: "0",
           margin_right: "0",
           metadata: {
@@ -34,10 +36,14 @@ class PreviewsController < ApplicationController
     pdf = Gotenberg::Rails.render_pdf(
       html:,
       display_url: request.original_url,
+      header_html: pdf_header_html,
+      footer_html: pdf_footer_html,
       filename: "gotenberg-rails-direct.pdf",
       pdf_options: {
         print_background: true,
         prefer_css_page_size: true,
+        margin_top: "0.75in",
+        margin_bottom: "0.75in",
         metadata: { Title: "Direct HTML PDF" }
       }
     )
@@ -49,6 +55,14 @@ class PreviewsController < ApplicationController
   end
 
   private
+
+  def pdf_header_html
+    render_to_string(template: "previews/pdf_header", layout: false, formats: [ :html ])
+  end
+
+  def pdf_footer_html
+    render_to_string(template: "previews/pdf_footer", layout: false, formats: [ :html ])
+  end
 
   def pdf_display_url
     base_url = ENV.fetch("PDF_DISPLAY_BASE_URL", request.base_url)
@@ -64,6 +78,7 @@ class PreviewsController < ApplicationController
       rows: [
         [ "HTML template", "Display the Rails ERB template as a regular page", "OK" ],
         [ "PDF renderer", "Render the same template as a PDF through Gotenberg", "OK" ],
+        [ "Header / footer", "Render separate HTML templates on every PDF page", "OK" ],
         [ "Options", "Pass background, page size, and metadata options", "OK" ]
       ]
     }
