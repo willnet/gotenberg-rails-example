@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Include only the Rails components used by this HTML/PDF example.
-gem "railties", "~> 8.1.2"
+gem "railties", "~> 8.1.4"
 gem "actionpack", "~> 8.1.2"
 
 # Serve the stylesheet used by the HTML and PDF previews.
